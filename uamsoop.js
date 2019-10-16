@@ -1,4 +1,4 @@
-const users = new Map();
+const userList = new Map();
 
 class User{
     constructor(email, password, passwordConfirmation) {
@@ -13,15 +13,15 @@ class User{
     }
 
     save(){
-        users.set(this.email, this);
+        userList.set(this.email, this);
         return this;
     }
 
     authenticate(){
-        if (typeof users.get(this.email) === "undefined"){
+        if (typeof userList.get(this.email) === "undefined"){
             console.log("User does not exist!");
         }
-        else if (users.get(this.email).getPassword() === this.password){
+        else if (userList.get(this.email).getPassword() === this.password){
             console.log("Authentication successful!");
             this.signedIn = true;
         }
@@ -45,7 +45,7 @@ class User{
     }
 
     signUp(){
-        if (typeof users.get(this.email) === "undefined"){
+        if (typeof userList.get(this.email) === "undefined"){
             console.log("User creation successful!");
             this.save();
         }
@@ -73,7 +73,8 @@ class User{
     }
 
     signOut(){
-        if (this.signedIn) {
+        this.deauthenticate();
+        if (! this.signedIn) {
             console.log("Signing out successful!");
         }
         else {
@@ -94,5 +95,5 @@ user.signUp().signIn().changePassword('123','456').signOut();
 
 //console.log(user);
 user.signUp();
-//console.log(users);
+//console.log(userList);
 //console.log(user.authenticate());
