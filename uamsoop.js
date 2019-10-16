@@ -18,12 +18,12 @@ class User{
     }
 
     authenticate(){
-        if (users.get(this.email).getPassword() === this.password){
+        if (typeof users.get(this.email) === "undefined"){
+            console.log("User does not exist!");
+        }
+        else if (users.get(this.email).getPassword() === this.password){
             console.log("Authentication successful!");
             this.signedIn = true;
-        }
-        else if (typeof users.get(this.email) === "undefined"){
-            console.log("User does not exist!");
         }
         else {
             console.log("Invalid password!");
@@ -86,6 +86,10 @@ class User{
 
 
 user = new User("juan","123","123");
+user.signIn();
+
+
+
 user.signUp().signIn().changePassword('123','456').signOut();
 
 //console.log(user);
