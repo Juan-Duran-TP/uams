@@ -8,14 +8,34 @@ class User{
         this.signedIn = false;
     };
 
+    getEmail(){
+        return this.email;
+    };
+
     getPassword(){
         return this.password;
-    }
+    };
+
+    getSignedIn(){
+        return this.signedIn;
+    };
+
+    setEmail(newEmail){
+        this.email = newEmail;
+    };
+
+    setPassword(newPassword){
+        this.password = newPassword;
+    };
+
+    setSignedIn(state){
+        this.signedIn = state;
+    };
 
     save(){
         userList.set(this.email, this);
         return this;
-    }
+    };
 
     authenticate(){
         if (typeof userList.get(this.email) === "undefined"){
@@ -32,7 +52,7 @@ class User{
     }
 
     changePassword(previous, next){
-        if (previous === this.password){
+        if (previous === userList.get(this.email).getPassword()){
             console.log("Password change successful!");
             this.password = next;
             this.passwordConfirmation = next;
@@ -64,13 +84,18 @@ class User{
             console.log("Sign in failed!");
         }
         return this;
-    }
+    };
 
     deauthenticate(){
-        this.signedIn = false;
-        console.log("Deauthentication successful");
+        if (! this.signedIn){
+            this.signedIn = false;
+            console.log("Deauthentication successful");
+        }
+        else{
+            console.log("Deauthentication failed! You are not signed in!")
+        }
         return this;
-    }
+    };
 
     signOut(){
         this.deauthenticate();
@@ -81,15 +106,14 @@ class User{
             console.log("You are not signed in. Signing out failed!");
         }
         return this;   
-    }
+    };
 }
 
 
 
 user = new User("juan","123","123");
+user.signOut();
 user.signIn();
-
-
 
 user.signUp().signIn().changePassword('123','456').signOut();
 
