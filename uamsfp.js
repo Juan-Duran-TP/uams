@@ -1,48 +1,22 @@
 const userList = new Map();
 
-class User{
-    constructor(email, password, passwordConfirmation) {
-        this.email = email;
-        this.password = password;
-        this.passwordConfirmation = passwordConfirmation;
-        this.signedIn = false;
-    };
-
-    getEmail(){
-        return this.email;
-    }
-
-    getPassword(){
-        return this.password;
-    }
-
-    getSignedIn(){
-        return this.signedIn;
-    }
-
-    setEmail(newEmail){
-        this.email = newEmail;
-    }
-
-    setPassword(newPassword){
-        this.password = newPassword;
-    }
-
-    setSignedIn(state){
-        this.signedIn = state;
-    }
-
-    
+const user = function(email, password, passwordConfirmation) {
+    this.email = email;
+    this.password = password;
+    this.passwordConfirmation = passwordConfirmation;
+    this.signedIn = false;
+    return this;
 };
+    
 
-function save(){
+const save = function(user){
     userList.set(user.email, user);
 };
 
-function signUp(){
-    if (typeof userList.get(user.getEmail()) === "undefined"){
+const signUp = function(user){
+    if (typeof userList.get(user.email) === "undefined"){
         console.log("User creation successful!");
-        save();
+        save(user);
     }
     else {
         console.log("This email is already linked with an account. Account creation failed!");
@@ -50,21 +24,21 @@ function signUp(){
 };
 
 
-function signIn(user){
+const signIn = function(user){
     function authenticate() {
-        if (typeof userList.get(user.getEmail()) === "undefined"){
+        if (typeof userList.get(user.email) === "undefined"){
             console.log("User does not exist!");
         }
-        else if (userList.get(user.getEmail()).getPassword() === user.getPassword()){
+        else if (userList.get(user.email).password === user.password){
             console.log("Authentication successful!");
-            user.setSignedIn(true);
+            user.signedIn = true;
         }
         else {
             console.log("Invalid password!");
         }
     };
     authenticate();
-    if (user.getSignedIn()){
+    if (user.signedIn){
         console.log("You have successfully signed in!");     
     }
     else {
@@ -72,32 +46,34 @@ function signIn(user){
     }
 };
 
-function changePassword(previous, next, user){
-    if (previous === userList.get(user.getEmail()).getPassword()){
+const changePassword = function(previous, next, user){
+    if (previous === userList.get(user.email).password){
         console.log("Password change successful!");
         user.password = next;
         user.passwordConfirmation = next;
-        save();      
+        save(user);      
     }
     else {
         console.log("Password authentication failed. Password change failed!");
     }
 
-}
+};
 
-function signOut(user){
+const signOut = function(user){
     function deauthenticate(){
-        if (user.getSignedIn()){
-            user.setSignedIn(false);
+        if (user.signedIn){
+            user.signedIn = false;
             console.log("Deauthentication successful!");
         }
         else{
             console.log("Deauthentication failed! You are not signed in!")
         }
     };
-    deauthenticate();
-    if (! user.getSignedIn()) {
-        console.log("Signing out successful!");
+    if (user.signedIn) {
+        deauthenticate();
+        if (user.signedIn){
+            console.log("Signing out successful!");
+        }
     }
     else {
         console.log("You are not signed in. Signing out failed!");
@@ -105,17 +81,5 @@ function signOut(user){
     return this;   
 };
 
-user = new User("juan","123","123");
-//console.log(user);
-signOut(user)
-signIn(user);
-signUp(user);
-signUp(user)
-signIn(user);
-changePassword("123","456",user);
-changePassword("345","456",user);
 
-signOut(user);
-
-
-//console.log(user);
+module.exports = { user, signIn, signUp, signOut, changePassword};

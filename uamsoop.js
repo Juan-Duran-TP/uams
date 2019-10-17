@@ -98,9 +98,11 @@ class User{
     };
 
     signOut(){
-        this.deauthenticate();
-        if (! this.signedIn) {
-            console.log("Signing out successful!");
+        if (this.signedIn) {
+            this.deauthenticate();
+            if (this.signedIn){
+                console.log("Signing out successful!");
+            }
         }
         else {
             console.log("You are not signed in. Signing out failed!");
@@ -117,7 +119,4 @@ user.signIn();
 
 user.signUp().signIn().changePassword('123','456').signOut();
 
-//console.log(user);
 user.signUp();
-//console.log(userList);
-//console.log(user.authenticate());
